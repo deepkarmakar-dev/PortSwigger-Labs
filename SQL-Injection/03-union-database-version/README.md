@@ -2,7 +2,7 @@
 
 ## 🧪 Lab
 
-**SQL Injection – Determine Database Version**
+Lab: SQL injection attack, querying the database type and version on Oracle
 
 Platform: PortSwigger Web Security Academy
 
