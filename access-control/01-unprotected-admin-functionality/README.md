@@ -1,97 +1,72 @@
-Lab: Unprotected Admin Functionality
+## 🧪 Lab: Unprotected Admin Functionality
 
-Platform: PortSwigger Web Security Academy
-Category: Access Control
-Level: Apprentice
-
-Lab Description
-
-This lab contains an unprotected administrator panel. The objective is to access the admin panel and delete the user carlos.
+While testing this lab, I started by looking for hidden endpoints.  
+A common place to check is the robots.txt file.
 
 ---
 
-Vulnerability
+## 🔍 Finding the Hidden Admin Panel
 
-Broken Access Control
+I visited:
 
-The application exposes an administrator panel without verifying whether the user has administrative privileges. This allows any user to access sensitive administrative functionality.
+/robots.txt
 
----
+There I found the following entry:
 
-Steps to Solve
-
-1. Discover Hidden Paths
-
-Check the "robots.txt" file to find hidden or disallowed directories.
-
-https://<LAB-ID>.web-security-academy.net/robots.txt
-
-Response:
-
-User-agent: *
 Disallow: /administrator-panel
 
-The robots file reveals a hidden administrative path.
+This immediately indicated that an admin panel exists but is just hidden.
 
 ---
 
-2. Access the Admin Panel
+## 🚪 Accessing the Admin Panel
 
-Navigate directly to the disclosed directory:
+I directly navigated to:
 
-https://<LAB-ID>.web-security-academy.net/administrator-panel
+/administrator-panel
 
-Because the application does not enforce proper access control, the administrator panel becomes accessible.
+Surprisingly, the panel was accessible without any authentication or authorization checks.
+
+This confirms a Broken Access Control vulnerability.
 
 ---
 
-3. Delete the Target User
+## 💥 Exploitation
 
-Inside the administrator panel, locate the delete option for the user carlos.
+Inside the admin panel, I found an option to delete users.
 
-The request typically looks like:
+The request looked like:
 
 /administrator-panel/delete?username=carlos
 
-Execute the request to delete the user.
+I executed this request, which successfully deleted the user "carlos".
 
 ---
 
-Result
+## ✅ Result
 
-After deleting the user carlos, the lab is successfully solved.
-
----
-
-Impact
-
-If this vulnerability existed in a real application, an attacker could:
-
-- Access administrative functionality
-- Delete or modify user accounts
-- Gain full control over administrative operations
+The lab was solved after deleting the target user.
 
 ---
 
-Remediation
+## ⚠️ Impact
 
-To prevent this vulnerability:
+If this issue exists in a real-world application:
 
-1. Implement proper server-side access control checks.
-2. Restrict administrative endpoints to authorized admin users only.
-3. Do not rely on hidden URLs or robots.txt for security.
-4. Enforce role-based access control (RBAC).
+- Any user can access admin functionality
+- Users can be deleted or modified
+- Complete system compromise is possible
 
-Example server-side check:
+---
 
-if($user->role !== 'admin'){
-    http_response_code(403);
-    exit("Forbidden");
+## 🔐 Remediation
+
+- Enforce proper server-side authorization checks
+- Restrict admin routes using role-based access control
+- Do not rely on hidden paths or robots.txt for security
+
+Example:
+
+if ($user->role !== 'admin') {
+    abort(403);
 }
-
----
-
-References
-
-OWASP Top 10 – Broken Access Control
-PortSwigger Web Security Academy – Access Control Labs
